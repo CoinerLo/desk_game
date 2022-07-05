@@ -1,0 +1,4 @@
+.footer {
+  @apply container mx-auto h-8 text-xs md:text-base text-zinc-400
+    flex justify-around items-center z-10;
+}

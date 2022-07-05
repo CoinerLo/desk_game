@@ -1,46 +1,56 @@
-# Getting Started with Create React App and Redux
+<h1 align="center">Настольные баталии</h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+[![Typing SVG](https://readme-typing-svg.herokuapp.com/?lines=Добро+пожаловать+в+суперпроект;...по+мотивам+настольной+игры;на+которые+никогда+нет+времени&center=true)](https://git.io/typing-svg)
 
-## Available Scripts
+![GitHub package.json version](https://img.shields.io/github/package-json/v/CoinerLo/desk_game)
+![GitHub repo size](https://img.shields.io/github/repo-size/CoinerLo/desk_game)
 
-In the project directory, you can run:
+Многопользовательская онлайн игра по мотивам настольной карточной. 
 
-### `npm start`
+Проект является монорепозиторием. Регистрация пользователей через сервис firebase.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+<h2 align="center">Технологии</h2>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `сервер`
 
-### `npm run build`
+fastify, @fastify/websocket, firebase-admin
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `клиент`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+react, @reduxjs/toolkit, react-use-websocket, tailwindcss
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<h2 align="center">Установка</h2>
 
-### `npm run eject`
+Для установки небходимо клонировать репозиторий
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    git clone https://github.com/CoinerLo/desk_game.git 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Перейти в папку проекта и установить зависимости
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    npm install
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Так же вам потребуются файлы, с конфигурацией сервиса firebase:
+- adminsdk.json
+- src/firebaseConfig.js
 
-## Learn More
+И в результате можно запускать сервер и клиент соответственно
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    npm run server
+    npm start
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Сервер запустится на http://localhost:8080
+
+Клиент http://localhost:3000
+
+<h2 align="center">Versions history</h2>
+
+## 0.1.0
+
+### Базовая версия реализует:
+- сервер и клиент,
+- регистрацию и авторизацию напрямую с клиента,
+- соединение клиента и сервера по websocket,
+- личный кабинет пользователя с возможностью смены имени
+- список пользователей онлайн

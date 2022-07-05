@@ -1,0 +1,55 @@
+.home {
+  @apply h-full flex
+    flex-col justify-center items-center
+    p-4;
+
+  h1 {
+    @apply text-4xl mt-6;
+  }
+
+  h2 {
+    @apply text-2xl mt-3;
+  }
+
+  h2 + p {
+    @apply mt-9 text-xl text-stone-500;
+  }
+  
+  &__renameWindow {
+    @apply h-16 mt-8;
+
+    form {
+      @apply flex-col md:flex md:flex-row justify-between text-xl;
+
+      input {
+        @apply ml-3 text-black;
+      }
+
+      label {
+        @apply flex items-center p-5 relative border rounded-xl;
+      }
+
+      span {
+        @apply block absolute bottom-0 right-4 text-sm text-rose-600;
+      }
+
+      div {
+        @apply flex justify-end items-center ml-3;
+
+        button[type='submit'] {
+          @apply mr-4;
+        }
+
+        button[type='close'] {
+          @apply p-3;
+        }
+      }
+    }
+  }
+
+  button[type='button'] {
+    @apply px-20 py-4
+      text-2xl border-2
+      bg-sky-500 hover:bg-sky-600 transition-colors duration-300;
+  }
+}

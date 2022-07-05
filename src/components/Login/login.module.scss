@@ -1,0 +1,22 @@
+.login {
+  @apply h-full p-6;
+  &_title {
+    @apply text-4xl mt-6 xs:mt-14;
+  }
+
+  h3 {
+    @apply text-2xl mt-3;
+  }
+
+  .login_signup {
+    @apply text-lg;
+    h4 {
+      @apply text-xl;
+    }
+    a {
+      @apply block w-min m-auto mt-2 p-2
+        hover:border hover:bg-amber-200 hover:text-black
+        transition-colors duration-300;
+    }
+  }
+}

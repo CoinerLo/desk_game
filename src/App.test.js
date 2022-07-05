@@ -1,15 +1,20 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import './firebaseConfig';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { store } from './store';
 import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 
-test('renders learn react link', () => {
-  const { getByText } = render(
+test('renders main element and title', async () => {
+  render(
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </Provider>
   );
 
-  expect(getByText(/learn/i)).toBeInTheDocument();
+  expect(screen.getByTestId('html-element-main')).toBeInTheDocument();
+  expect(await screen.findByText('Добро пожаловать!')).toBeVisible();
 });

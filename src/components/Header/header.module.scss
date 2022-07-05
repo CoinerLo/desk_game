@@ -1,0 +1,28 @@
+.header {
+  @apply container flex mx-auto h-14 md:h-24 z-10
+    rounded-full text-2xl bg-base-blue-200;
+
+  &__logo {
+    @apply md:w-20 md:h-20 w-10 h-10 m-2
+      flex justify-center items-center text-sm
+      border-2 rounded-full box-border;
+  }
+
+  &__nav {
+    @apply flex w-full items-center justify-around;
+  }
+
+  &__link {
+    @apply flex flex-row justify-center items-center
+      transform duration-300 p-3 grow basis-0
+      hover:text-red-600 hover:scale-125 hover:font-bold;
+
+    span + span {
+      @apply hidden md:block;
+    }
+
+    img {
+      @apply w-6 h-6 mr-3;
+    }
+  }
+}

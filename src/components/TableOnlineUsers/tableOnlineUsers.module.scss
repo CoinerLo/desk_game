@@ -1,0 +1,15 @@
+.tableOnlineUsers {
+  @apply w-full h-1/4
+    bg-use-dark-500
+    border rounded-xl border-use-white
+    shadow-lg shadow-use-white/25
+    overflow-hidden;
+  h3 {
+    @apply inline-block my-2 border-b;
+  }
+  ul {
+    @apply h-3/4 overflow-y-auto;
+  }
+}
+
+/* Протестировать переполение списка, приклеить заголовок и кастомизировать скролл */

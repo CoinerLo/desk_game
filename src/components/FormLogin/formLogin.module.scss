@@ -1,0 +1,35 @@
+.formLogin {
+  @apply container flex justify-center items-center h-1/2 text-xl;
+
+  form {
+    @apply flex flex-col m-6;
+  }
+
+  input {
+    @apply ml-3 p-2 text-black focus:bg-amber-100;
+  }
+
+  label {
+    @apply flex-col
+      max-w-max xs:p-3 my-1 mx-auto
+      h-24 xs:h-20 box-border text-left;
+
+    input[type="email"] {
+      @apply xs:ml-8;
+    }
+  }
+
+  span {
+    @apply block text-sm text-rose-600 text-center;
+  }
+
+  button {
+    @apply mx-auto my-1 xs:my-4 border-2 px-16 py-3 hover:cursor-pointer text-lg 
+      bg-sky-100 hover:enabled:bg-sky-600 transition-colors duration-300 font-bold
+      text-gray-800 enabled:bg-sky-500;
+  }
+
+  &_error_message {
+    @apply text-orange-500 text-base;
+  }
+}

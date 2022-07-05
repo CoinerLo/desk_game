@@ -1,0 +1,8 @@
+.app {
+  @apply flex flex-col h-screen
+    overflow-hidden
+    bg-use-dark-400 text-center text-use-white;
+  .main {
+    @apply grow container mx-auto;
+  }
+}
