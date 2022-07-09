@@ -9,7 +9,7 @@ const TableOnlineUsersContainer = ({ uid, name }) => {
   const port = process.env.REACT_APP_SERVER_PORT ?? 8080;
   const getSocketUrl = useCallback(() => `ws://${host}:${port}/api/v1/main`, [host, port]);
   const { data } = useGetGamesAllQuery();
-  console.log(data)
+  console.log(data); // тест, удалить в будующих версиях
   const {
     sendJsonMessage,
   } = useWebSocket(getSocketUrl, {
