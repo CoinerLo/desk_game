@@ -4,7 +4,8 @@
     before:-top-14 md:before:-top-24 before:left-1/2 before:-translate-x-1/2
     before:bg-[url('../../assets/jpg/bg-main-1.jpg')] before:bg-no-repeat
     before:bg-cover before:bg-blend-difference before:bg-center
-    before:animate-bgmain before:shadow-[inset_0_0_400px_200px_rgba(0,0,0,1)];
+    before:shadow-[inset_0_0_400px_200px_rgba(0,0,0,1)]
+    before:animate-bgmain;
 
   &_content {
     @apply h-full grow z-10;

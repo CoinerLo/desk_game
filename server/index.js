@@ -2,7 +2,7 @@ const fastify = require('fastify'),
   pino = require('pino'),
   addRoutes = require('./routes.js'),
   appAuth = require('./firebase/index');
-  require('dotenv').config();
+  require('dotenv').config({ path: '../.env' });
 console.log(appAuth);
 
 const isProduction = process.env.NODE_ENV === 'production';
