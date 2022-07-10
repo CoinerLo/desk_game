@@ -2,16 +2,14 @@ import { useState, useCallback, useLayoutEffect } from 'react';
 import useWebSocket /*{ ReadyState }*/ from 'react-use-websocket';
 import { useGetGamesAllQuery } from '../../api';
 import TableOnlineUsers from './TableOnlineUsers';
+import { useGetApiUrl } from '../../hooks/useGetApiUrl';
 
 const TableOnlineUsersContainer = ({ uid, name }) => {
   const [usersOnline, setUsersOnline] = useState([]);
 
-  const isProduction = process.env.NODE_ENV === 'production';
-  const host = process.env.REACT_APP_SERVER_HOST ?? window.location.hostname;
-  const port = process.env.REACT_APP_SERVER_PORT ?? 8080;
   const getSocketUrl = useCallback(() =>
-    isProduction ? `wss://${host}/api/v1/main` : `ws://${host}:${port}/api/v1/main`,
-    [host, isProduction, port]
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useGetApiUrl({ path: '/api/v1/main', protocol: 'ws' }), []
   );
 
   const { data } = useGetGamesAllQuery();

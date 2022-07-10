@@ -1,9 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { useGetApiUrl } from '../hooks/useGetApiUrl';
 
-const isProduction = process.env.NODE_ENV === 'production';
-const host = process.env.REACT_APP_SERVER_HOST ?? window.location.hostname;
-const port = process.env.REACT_APP_SERVER_PORT ?? 8080;
-const baseUrl = isProduction ? `https://${host}/api/v1/` : `http://${host}:${port}/api/v1/`;
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const baseUrl = useGetApiUrl({ path: '/api/v1/' });
 
 export const appApi = createApi({
   reducerPath: 'appApi',
