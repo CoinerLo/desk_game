@@ -5,9 +5,15 @@ import TableOnlineUsers from './TableOnlineUsers';
 
 const TableOnlineUsersContainer = ({ uid, name }) => {
   const [usersOnline, setUsersOnline] = useState([]);
+
+  const isProduction = process.env.NODE_ENV === 'production';
   const host = process.env.REACT_APP_SERVER_HOST ?? window.location.hostname;
   const port = process.env.REACT_APP_SERVER_PORT ?? 8080;
-  const getSocketUrl = useCallback(() => `wss://${host}:${port}/api/v1/main`, [host, port]);
+  const getSocketUrl = useCallback(() =>
+    isProduction ? `wss://${host}/api/v1/main` : `ws://${host}:${port}/api/v1/main`,
+    [host, isProduction, port]
+  );
+
   const { data } = useGetGamesAllQuery();
   console.log(data); // тест, удалить в будующих версиях
   const {
