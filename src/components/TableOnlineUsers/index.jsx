@@ -7,7 +7,7 @@ const TableOnlineUsersContainer = ({ uid, name }) => {
   const [usersOnline, setUsersOnline] = useState([]);
   const host = process.env.REACT_APP_SERVER_HOST ?? window.location.hostname;
   const port = process.env.REACT_APP_SERVER_PORT ?? 8080;
-  const getSocketUrl = useCallback(() => `ws://${host}:${port}/api/v1/main`, [host, port]);
+  const getSocketUrl = useCallback(() => `wss://${host}:${port}/api/v1/main`, [host, port]);
   const { data } = useGetGamesAllQuery();
   console.log(data); // тест, удалить в будующих версиях
   const {

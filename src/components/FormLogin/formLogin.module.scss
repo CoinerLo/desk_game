@@ -11,7 +11,7 @@
 
   label {
     @apply flex-col
-      max-w-max xs:p-3 my-1 mx-auto
+      max-w-max xs:p-3 my-1 mx-auto /* Есть проблем в mozila */
       h-24 xs:h-20 box-border text-left;
 
     input[type="email"] {
