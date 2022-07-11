@@ -10,6 +10,12 @@
   ul {
     @apply h-3/4 overflow-y-auto;
   }
+  ul::-webkit-scrollbar-track {
+    @apply bg-use-dark-500;
+  }
+  li {
+    @apply overflow-x-hidden mx-2 truncate;
+  }
 }
 
 /* Протестировать переполение списка, приклеить заголовок и кастомизировать скролл */
