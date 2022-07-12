@@ -9,6 +9,7 @@ const buildState = (currentState) => {
     usersOnline: [
       { uid: 1, name: 'Admin' },
     ],
+    usersSocketID: {},
     games: [
       { id: testGameID, author: 'Admin', players: ['Admin', 'Player'] },
     ],
@@ -47,22 +48,29 @@ module.exports = (app, defaultState = {}) => {
   }); /* не оспользуется клиентом в этой версии*/
 
   app.get('/api/v1/main', { websocket: true }, (connection, req) => {
+    const socketID = req.headers["sec-websocket-key"];
+
+    app.log.info({
+      msg: "Client connect",
+      socket: socketID
+    });
+
     connection.socket.on('message', (message) => {
       const { type, payload } = JSON.parse(message);
 
       switch (type) {
-        case 'adduser':
+        case 'userdata':
           state.usersOnline.push(payload);
           const table = {};
           state.usersOnline = state.usersOnline.filter(({ uid }) => (!table[uid] && (table[uid] = 1)));
+          state.usersSocketID[socketID] = payload.uid;
           app.websocketServer.clients.forEach(clientMassMailing);
-          console.log("Add", state.usersOnline,`\n`, payload,`\n`);
           break;
-        case 'exituser':
-          state.usersOnline = state.usersOnline.filter(({ uid }) => uid !== payload.uid);
-          app.websocketServer.clients.forEach(clientMassMailing);
-          console.log("Exit", state.usersOnline, `\n`, payload, `\n`);
-          break;
+        // case 'exituser':
+        //   state.usersOnline = state.usersOnline.filter(({ uid }) => uid !== payload.uid);
+        //   app.websocketServer.clients.forEach(clientMassMailing);
+        //   // console.log("Exit", state.usersOnline, `\n`, payload, `\n`);
+        //   break;
         default: 
           app.websocketServer.clients.forEach(client => {
             if (client.readyState === 1) {
@@ -70,6 +78,18 @@ module.exports = (app, defaultState = {}) => {
             }
           });
       }
+    });
+
+    connection.socket.on('close', () => {
+      const id = state.usersSocketID[socketID];
+      state.usersOnline = state.usersOnline.filter(({ uid }) => uid !== id);
+      app.websocketServer.clients.forEach(clientMassMailing);
+      delete state.usersSocketID[socketID];
+
+      app.log.info({
+        msg: "Client disconnect",
+        socket: socketID
+      });
     });
   });
 

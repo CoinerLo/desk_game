@@ -35,8 +35,8 @@ const TableOnlineUsersContainer = ({ uid, name }) => {
   // }[readyState];
 
   useLayoutEffect(() => {
-    sendJsonMessage({ type: 'adduser', payload: { name, uid }});
-    return () => sendJsonMessage({ type: 'exituser', payload: { uid } });
+    sendJsonMessage({ type: 'userdata', payload: { name, uid }});
+    //return () => sendJsonMessage({ type: 'exituser', payload: { uid } });
   }, [sendJsonMessage, uid, name]);
 
   return (
@@ -47,4 +47,4 @@ const TableOnlineUsersContainer = ({ uid, name }) => {
 export default TableOnlineUsersContainer;
 
 
-/*реализовать пинг сервера для разрыва соединения и корректировки списка юзеров*/
+/**/
