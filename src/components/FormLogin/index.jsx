@@ -54,8 +54,8 @@ const FormLogin = ({ title, handlerSubmit }) => {
     <section className={styles.formLogin}>
       <form onSubmit={handleSubmit(handlerSubmit)}>
         {errorAuth && <h1 className={styles.formLogin_error_message}>{errorAuthUser(errorAuth)}</h1>}
-        <label  htmlFor="email">
-          Email:
+        <label htmlFor="email">
+          <p>Email:</p>
           <input
             id="email"
             type="email"
@@ -73,7 +73,7 @@ const FormLogin = ({ title, handlerSubmit }) => {
           {errors.email && <span>{errors?.email?.message || "Ошибка в email!"}</span>}
         </label>
         <label htmlFor="password">
-          Пароль:
+          <p>Пароль:</p>
           <input
             id="password"
             type="password"
