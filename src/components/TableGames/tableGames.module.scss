@@ -1,0 +1,11 @@
+.tableGames {
+  @apply w-full h-3/5 mt-5
+    bg-use-dark-500
+    border rounded-xl border-use-white
+    shadow-lg shadow-use-white/25
+    overflow-hidden;
+
+  h3 {
+    @apply inline-block my-2 border-b;
+  }
+}

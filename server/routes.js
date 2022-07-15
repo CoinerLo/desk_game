@@ -30,7 +30,7 @@ module.exports = (app, defaultState = {}) => {
 
   const clientMassMailing = (client) => {
     if (client.readyState === 1) {
-      client.send(JSON.stringify(state.usersOnline));
+      client.send(JSON.stringify({ type: 'users', payload: state.usersOnline }));
     }
   }
 
@@ -65,6 +65,7 @@ module.exports = (app, defaultState = {}) => {
           state.usersOnline = state.usersOnline.filter(({ uid }) => (!table[uid] && (table[uid] = 1)));
           state.usersSocketID[socketID] = payload.uid;
           app.websocketServer.clients.forEach(clientMassMailing);
+          connection.socket.send(JSON.stringify({ type: 'games', payload: state.games }));
           break;
         // case 'exituser':
         //   state.usersOnline = state.usersOnline.filter(({ uid }) => uid !== payload.uid);
@@ -74,7 +75,7 @@ module.exports = (app, defaultState = {}) => {
         default: 
           app.websocketServer.clients.forEach(client => {
             if (client.readyState === 1) {
-              client.send('hi from server for all clients');
+              client.send(JSON.stringify('hi from server for all clients'));
             }
           });
       }

@@ -1,13 +1,11 @@
 import { useAuth } from '../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { clearErrorAuth, renameUser } from '../../store/slices/userSlice';
 import styles from './home.module.scss';
 
-const Home = ({ isAuth }) => {
-  const navigate = useNavigate();
+const Home = () => {
   const dispatch = useDispatch();
   const [isOpenRename, setIsOpenRename] = useState(false);
   const { email, name, createdAt, errorAuth, uid } = useAuth();
@@ -20,10 +18,9 @@ const Home = ({ isAuth }) => {
   const { onChange } = register('name');
 
   useEffect(() => {
-    if (!isAuth) navigate('/login', {replace: true});
     if (isOpenRename) setFocus('name');
     return () => errorAuth && dispatch(clearErrorAuth());
-  }, [isAuth, navigate, setFocus, isOpenRename, dispatch, errorAuth, name, uid]);
+  }, [setFocus, isOpenRename, dispatch, errorAuth, name, uid]);
 
   const handlerSubmit = (data, e) => {
     e.preventDefault();

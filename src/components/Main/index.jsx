@@ -1,32 +1,69 @@
-import { useState } from 'react';
+import { useState, useLayoutEffect } from 'react';
+import useWebSocket /*{ ReadyState }*/ from 'react-use-websocket';
+import { useGetGamesAllQuery } from '../../api';
 import { useAuth } from '../../hooks/useAuth';
-import TableOnlineUsersContainer from '../TableOnlineUsers';
-import styles from './main.module.scss';
+import { useGetApiUrl } from '../../hooks/useGetApiUrl';
+import Main from './Main';
 
-const Main = () => {
+const MainContainer = () => {
   const { isAuth, name, uid } = useAuth();
-  const [ isOpenAside, setIsOpenAside ] = useState(true);
+  const [usersOnline, setUsersOnline] = useState([]);
+  const [gamesList, setGamesList] = useState([]);
+  const getSocketUrl = useGetApiUrl({ path: '/api/v1/main', protocol: 'ws' });
+
+  const { data } = useGetGamesAllQuery();
+  console.log(data); // тест, удалить в будующих версиях
+  const {
+    sendJsonMessage,
+  } = useWebSocket(getSocketUrl, {
+    onError: (event) => console.log(event),
+    //onOpen: () => console.log('opened'),
+    onMessage: (event) => {
+      const { type, payload } = JSON.parse(event.data);
+
+      switch (type) {
+        case 'users':
+          setUsersOnline(payload);
+          break;
+        case 'games':
+          setGamesList(payload);
+          break;
+        default:
+          console.log(`Неизвестный тип от сервера: ${type}`);
+      }
+      
+    },
+    //onClose: () => console.log('goodbye'),
+    shouldReconnect: () => true,
+    filter: () => false,
+    share: true,
+  });
+
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: 'Connecting',
+  //   [ReadyState.OPEN]: 'Open',
+  //   [ReadyState.CLOSING]: 'Closing',
+  //   [ReadyState.CLOSED]: 'Closed',
+  //   [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+  // }[readyState];
+
+  useLayoutEffect(() => {
+    sendJsonMessage({ type: 'userdata', payload: { name, uid }});
+    //return () => sendJsonMessage({ type: 'exituser', payload: { uid } });
+  }, [sendJsonMessage, uid, name]);
+
   if (!isAuth) console.log('Втупительная страница для незарегистрированных пользователей');
 
   return (
-    <section className={styles.main}>
-      <div className={styles.main_content}>
-        <h1>Добро пожаловать!</h1>
-        <div>
-          <h2>Здесь будет основной контент для всех пользователей, но что бы кнопка что-то показала - нужно залогиниться!</h2>
-          <p>Наслаждайтесь!</p>
-        </div>
-      </div>
-      <div className={styles.main_aside__button}>
-        <button onClick={() => setIsOpenAside(!isOpenAside)}>O</button>
-      </div>
-      {isAuth && (
-        <aside className={isOpenAside ?  styles.main_aside__open : styles.main_aside__close}>
-          <TableOnlineUsersContainer name={name} uid={uid} />
-        </aside>
-      )}
-    </section>
+    <Main
+      isAuth={isAuth}
+      usersOnline={usersOnline}
+      gamesList={gamesList}
+    />
   );
 }
 
-export default Main;
+export default MainContainer;
+
+
+/* Нужно будет в будущих версиях сделать эту страницу приватной, а стартовую чисто рекламной */

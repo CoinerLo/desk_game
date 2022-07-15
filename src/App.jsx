@@ -6,11 +6,11 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Header from './components/Header';
 import Home from './components/Home';
-import { useAuth } from './hooks/useAuth';
+import PrivateRoute from './components/PrivateRoute';
 import styles from './App.module.scss';
 
+
 const App = () => {
-  const { isAuth } = useAuth();
 
   return (
     <div className={styles.app}>
@@ -18,7 +18,14 @@ const App = () => {
       <main className={styles.main} data-testid="html-element-main">
         <Routes>
           <Route path='/' element={<Main />} />
-          <Route path="home" element={<Home isAuth={isAuth} />} />
+          <Route
+            path="home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
           <Route path='login' element={<Login />} />
           <Route path='signup' element={<SignUp />} />
         </Routes>
