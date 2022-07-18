@@ -1,0 +1,41 @@
+.modalStartGame {
+  @apply w-screen h-screen absolute md:-top-24 -top-14 z-20
+    flex flex-col justify-center items-center
+    bg-use-dark-500/75;
+
+  &_content {
+    @apply w-1/2 h-1/2 relative p-6
+      flex flex-col items-center
+      bg-use-dark-500 border rounded-md;
+
+    h1 {
+      @apply mt-7 text-xl xs:text-3xl;
+    }
+
+    &_start {
+      @apply mt-7 py-5 px-10 uppercase border border-white
+        hover:border-none hover:bg-use-red/50 hover:rounded-full
+        transition-colors duration-300;
+    }
+  }
+
+  &_close {
+    @apply w-6 h-6
+      absolute right-6 top-6;
+  }
+
+  &_form {
+    @apply mt-14;
+    &__numberOfPlayers {
+      legend {
+        @apply mb-5;
+      }
+      &_inp {
+        @apply flex flex-col items-start;
+      }
+      input {
+        @apply mr-4;
+      }
+    }
+  }
+}

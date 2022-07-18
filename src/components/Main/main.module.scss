@@ -15,7 +15,7 @@
     }
 
     div {
-      @apply flex-col h-3/4 justify-center items-center;
+      @apply flex-col h-1/4 justify-center items-center;
 
       h2 {
         @apply w-2/3 m-auto my-5 text-2xl;
@@ -24,6 +24,13 @@
       p {
         @apply text-xl;
       }
+    }
+
+    &_buttonStart {
+      @apply px-8 py-4 border-2
+        bg-use-dark-500 transition-colors duration-300
+        hover:bg-use-dark-500/25 hover:border-use-yellow hover:text-use-yellow
+        text-2xl font-bold tracking-wide uppercase #{!important};
     }
   }
 
