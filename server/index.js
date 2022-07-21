@@ -1,7 +1,8 @@
 const fastify = require('fastify'),
   pino = require('pino'),
-  addRoutes = require('./routes.js'),
-  appAuth = require('./firebase/index');
+  //addRoutes = require('./routes.js'),
+  appAuth = require('./firebase/index'),
+  OnlineService = require('./services/OnlineService');
   require('dotenv').config({ path: '../.env' });
 console.log(appAuth);
 
@@ -32,11 +33,14 @@ const logger = pino({
   }
 });
 
+const instanceOnlineService = new OnlineService();
+
 const start = async () => {
   const app = fastify({ logger });
   app.register(require('@fastify/cors'), cors);
   await app.register(require('@fastify/websocket'), { options: { clientTracking: true } });
-  addRoutes(app);
+  await app.register(require('./routes'), { instanceOnlineService });
+  //addRoutes(app);
   try {
     await app.listen({ port, host }, () => {
       console.log(`Server has been started on ${port} port`);

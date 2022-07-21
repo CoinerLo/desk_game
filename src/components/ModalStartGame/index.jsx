@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import styles from './modalStartGame.module.scss';
 
-const ModalStartGame = ({ setIsOpenStartGame }) => {
+const ModalStartGame = ({ setIsOpenStartGame, addNewGame }) => {
   const { register, handleSubmit } = useForm({
     defaultValues: {
       radio: '2'
@@ -10,6 +10,7 @@ const ModalStartGame = ({ setIsOpenStartGame }) => {
 
   const sendFormData = (data) => {
     const { radio } = data;
+    addNewGame({ maxPlayers: radio });
     console.log(radio);
   }
 

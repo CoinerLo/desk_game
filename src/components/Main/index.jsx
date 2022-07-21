@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState, useCallback, useLayoutEffect } from 'react';
 import useWebSocket /*{ ReadyState }*/ from 'react-use-websocket';
 import { useGetGamesAllQuery } from '../../api';
 import { useAuth } from '../../hooks/useAuth';
@@ -11,7 +11,7 @@ const MainContainer = () => {
   const [gamesList, setGamesList] = useState([]);
   const getSocketUrl = useGetApiUrl({ path: '/api/v1/main', protocol: 'ws' });
 
-  const { data } = useGetGamesAllQuery();
+  const { data } = useGetGamesAllQuery(); // test
   console.log(data); // тест, удалить в будующих версиях
   const {
     sendJsonMessage,
@@ -52,6 +52,15 @@ const MainContainer = () => {
     //return () => sendJsonMessage({ type: 'exituser', payload: { uid } });
   }, [sendJsonMessage, uid, name]);
 
+  const addNewGame = useCallback(({ maxPlayers }) => {
+    const game = {
+      author: name,
+      players: [ name ],
+      maxPlayers
+    }
+    sendJsonMessage({ type: 'newgame', payload: game });
+  }, [name, sendJsonMessage]);
+
   if (!isAuth) console.log('Втупительная страница для незарегистрированных пользователей');
 
   return (
@@ -59,6 +68,7 @@ const MainContainer = () => {
       isAuth={isAuth}
       usersOnline={usersOnline}
       gamesList={gamesList}
+      addNewGame={addNewGame}
     />
   );
 }

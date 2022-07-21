@@ -9,7 +9,7 @@ export const appApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     getUsersAll: builder.query({
-      query: () => 'users',
+      query: () => 'users', /*не используется в этой версии*/
     }),
     createNewUser: builder.mutation({
       query: (credentials) => ({
