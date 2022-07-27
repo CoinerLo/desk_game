@@ -11,7 +11,6 @@ const ModalStartGame = ({ setIsOpenStartGame, addNewGame }) => {
   const sendFormData = (data) => {
     const { radio } = data;
     addNewGame({ maxPlayers: radio });
-    console.log(radio);
   }
 
   return (

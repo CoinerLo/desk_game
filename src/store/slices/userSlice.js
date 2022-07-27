@@ -55,6 +55,7 @@ const initialState = {
   createdAt: null,
   token: null,
   errorAuth: null,
+  gameId: ''
 };
 
 const userSlice = createSlice({
@@ -63,6 +64,9 @@ const userSlice = createSlice({
   reducers: {
     clearErrorAuth: (state) => {
       state.errorAuth = null;
+    },
+    setGameId: (state, { payload }) => {
+      state.gameId = payload;
     }
   },
   extraReducers: (builder) => {
@@ -128,6 +132,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { clearErrorAuth } = userSlice.actions;
+export const { clearErrorAuth, setGameId } = userSlice.actions;
 
 export default userSlice.reducer;

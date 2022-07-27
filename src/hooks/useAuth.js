@@ -12,6 +12,7 @@ export function useAuth() {
     token,
     isLoaded,
     errorAuth,
+    gameId,
   } = useSelector(state => state.user);
 
   return {
@@ -26,5 +27,6 @@ export function useAuth() {
     token,
     isLoaded,
     errorAuth,
+    gameId,
   };
 }

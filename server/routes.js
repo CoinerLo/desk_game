@@ -53,6 +53,12 @@ module.exports = async (app, {instanceOnlineService}) => {
     }
   }
 
+  const playersMassMailing = (client, gameId) => {
+    if (client.readyState === 1) {
+      client.send(JSON.stringify({ type: 'players', payload: state.getPlayersThisGame(gameId) }));
+    }
+  }
+
   app.get('/api/v1/users', async (_request, _reply) => { /* на клиенте есть метод но не используется в этой версии */
     const allUsers = await appAuth.auth().listUsers(1000);
     state.usersOnline = [...state.usersOnline, ...allUsers.users];
@@ -68,12 +74,12 @@ module.exports = async (app, {instanceOnlineService}) => {
 
   app.get('/api/v1/main', { websocket: true }, (connection, req) => {
     const socketID = req.headers["sec-websocket-key"];
-
+    connection.socket.id = socketID;
     app.log.info({
       msg: "Client connect",
       socket: socketID
     });
-
+    //console.log(connection.socket)
     connection.socket.on('message', (message) => {
       const { type, payload } = JSON.parse(message);
 
@@ -88,7 +94,8 @@ module.exports = async (app, {instanceOnlineService}) => {
           connection.socket.send(JSON.stringify({ type: 'games', payload: games }));
           break;
         case 'newgame':
-          state.addGame(payload);
+          const gameId = state.addGame(payload);
+          connection.socket.send(JSON.stringify({ type: 'gameId', payload: gameId }))
           app.websocketServer.clients.forEach(gamesMassMailing);
           break;
         // case 'exituser':
@@ -115,6 +122,54 @@ module.exports = async (app, {instanceOnlineService}) => {
       app.log.info({
         msg: "Client disconnect",
         socket: socketID
+      });
+    });
+  });
+
+  app.get('/game/:gameId', { websocket: true }, (connection, req) => {
+    const { gameId } = req.params;
+    const socketID = req.headers["sec-websocket-key"];
+
+    app.log.info({
+      msg: "Player connect to game",
+      socket: socketID,
+      gameId,
+    });
+
+    connection.socket.on('message', (message) => {
+      const { type, payload } = JSON.parse(message);
+
+      switch (type) {
+        case 'playerEnteredGame':
+          state.playerEnteredGame({ usersData: payload, gameId, socketID });
+          app.websocketServer.clients.forEach(client => playersMassMailing(client, gameId));
+          // новому игроку отправить текущий стейт игры
+          break;
+        case 'changingCurrentPlayer':
+          // смена действующего игрокаб переход хода. изменение стейта, рассылка нового стейта всем
+          state.changingGameState({ gameId, payload });
+          break;
+        case 'gameState':
+          // отдать текущее состояние игры
+          state.getGameState(gameId);
+          break;
+        default:
+          // дефолтное сообщение всем игрокам
+      }
+    });
+
+    connection.socket.on('close', () => {
+      //выход игрока, изменить стейт и оповестить всех игроков этой комнаты
+      state.playerLeftGame(socketID);
+      app.websocketServer.clients.forEach(client => {
+        playersMassMailing(client, gameId);
+        gamesMassMailing(client);
+      });
+
+      app.log.info({
+        msg: "Player disconnect at game",
+        socket: socketID,
+        gameId,
       });
     });
   });
