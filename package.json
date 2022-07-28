@@ -1,6 +1,6 @@
 {
   "name": "battle_of_magicians",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "homepage": ".",
   "dependencies": {
     "@fastify/cors": "^8.0.0",

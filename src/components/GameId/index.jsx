@@ -28,6 +28,10 @@ const GameId = () => {
         case 'players':
           setPlayers(payload);
           break;
+        case 'error':
+          dispatch(setGameId(''));
+          navigate('/', { replace: true });
+          break;
         case 'gameState':
           setGameState(payload);
           break;
@@ -46,14 +50,14 @@ const GameId = () => {
 
   useLayoutEffect(() => {
     if (!!name) sendJsonMessage({ type: 'playerEnteredGame', payload: { name, uid } });
-    
+
     // если в игре нет мест то выкидываем обратно
-    
+    // отключение кнопки на фронте, при полной комнате менять стейт игры и в зависимости от него в таблице деактивировать кнопку присоединения
+
     //return () => sendJsonMessage({ type: 'exituser', payload: { uid } });
   }, [sendJsonMessage, uid, name]);
 
   const handlerExitGame = () => {
-    // отправить инфу на сервер playerEnteredGame playerLeftGame
     dispatch(setGameId(''));
     navigate('/', { replace: true });
   }

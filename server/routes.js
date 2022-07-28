@@ -41,22 +41,32 @@ const { appAuth } = require('./firebase/index');
 module.exports = async (app, {instanceOnlineService}) => {
   const state = instanceOnlineService; //buildState(defaultState);
 
-  const clientMassMailing = (client) => {
-    if (client.readyState === 1) {
-      client.send(JSON.stringify({ type: 'users', payload: state.getAllUsersOnline() }));
-    }
+  const clientMassMailing = () => {
+    // if (client.readyState === 1) {
+    //   client.send(JSON.stringify({ type: 'users', payload: state.getAllUsersOnline() }));
+    // }
+    const sockets = state.getAllUsersSocketsOnline();
+    const usersData = state.getAllUsersData();
+    sockets.forEach(socket => socket.send(JSON.stringify({ type: 'users', payload: usersData })));
   }
 
-  const gamesMassMailing = (client) => {
-    if (client.readyState === 1) {
-      client.send(JSON.stringify({ type: 'games', payload: state.getAllGames() }));
-    }
+  const gamesMassMailing = () => {
+    // if (client.readyState === 1) {
+    //   client.send(JSON.stringify({ type: 'games', payload: state.getAllGames() }));
+    // }
+    const sockets = state.getAllUsersSocketsOnline();
+    const games = state.getAllGamesData();
+    sockets.forEach(socket => socket.send(JSON.stringify({ type: 'games', payload: games })));
   }
 
-  const playersMassMailing = (client, gameId) => {
-    if (client.readyState === 1) {
-      client.send(JSON.stringify({ type: 'players', payload: state.getPlayersThisGame(gameId) }));
-    }
+  const playersMassMailing = (gameId) => {
+    // if (client.readyState === 1) {
+    //   client.send(JSON.stringify({ type: 'players', payload: state.getPlayersThisGame(gameId) }));
+    // }
+    const sockets = state.getUsersSocketsThisGames(gameId);
+    if (!sockets) return null;
+    const players = state.getPlayersThisGame(gameId);
+    sockets.forEach(socket => socket.send(JSON.stringify({ type: 'players', payload: players })))
   }
 
   app.get('/api/v1/users', async (_request, _reply) => { /* на клиенте есть метод но не используется в этой версии */
@@ -74,29 +84,27 @@ module.exports = async (app, {instanceOnlineService}) => {
 
   app.get('/api/v1/main', { websocket: true }, (connection, req) => {
     const socketID = req.headers["sec-websocket-key"];
-    connection.socket.id = socketID;
+    
     app.log.info({
       msg: "Client connect",
       socket: socketID
     });
-    //console.log(connection.socket)
+
     connection.socket.on('message', (message) => {
       const { type, payload } = JSON.parse(message);
 
       switch (type) {
         case 'userdata':
-          // state.usersOnline.push(payload);
-          // const table = {};
-          // state.usersOnline = state.usersOnline.filter(({ uid }) => (!table[uid] && (table[uid] = 1)));
-          // state.usersSocketID[socketID] = payload.uid;
-          const games = state.addUserOnline(payload, socketID);
-          app.websocketServer.clients.forEach(clientMassMailing);
+          state.addUserOnline({ data: payload, socketID, socket: connection.socket });
+          const games = state.getAllGamesData();
+          //const games = state.addUserOnline(payload, socketID);
+          clientMassMailing();
           connection.socket.send(JSON.stringify({ type: 'games', payload: games }));
           break;
         case 'newgame':
           const gameId = state.addGame(payload);
           connection.socket.send(JSON.stringify({ type: 'gameId', payload: gameId }))
-          app.websocketServer.clients.forEach(gamesMassMailing);
+          gamesMassMailing();
           break;
         // case 'exituser':
         //   state.usersOnline = state.usersOnline.filter(({ uid }) => uid !== payload.uid);
@@ -116,7 +124,7 @@ module.exports = async (app, {instanceOnlineService}) => {
       // const id = state.usersSocketID[socketID];
       // state.usersOnline = state.usersOnline.filter(({ uid }) => uid !== id);
       state.exitUser(socketID);
-      app.websocketServer.clients.forEach(clientMassMailing);
+      clientMassMailing();
       //delete state.usersSocketID[socketID];
 
       app.log.info({
@@ -141,12 +149,16 @@ module.exports = async (app, {instanceOnlineService}) => {
 
       switch (type) {
         case 'playerEnteredGame':
-          state.playerEnteredGame({ usersData: payload, gameId, socketID });
-          app.websocketServer.clients.forEach(client => playersMassMailing(client, gameId));
+          const game = state.playerEnteredGame({ userData: payload, gameId, socketID, socket: connection.socket });
+          if (game.hasOwnProperty('error')) {
+            connection.socket.send(JSON.stringify({ type: 'error' }));
+          } else {
+            playersMassMailing(gameId);
+          }
           // новому игроку отправить текущий стейт игры
           break;
         case 'changingCurrentPlayer':
-          // смена действующего игрокаб переход хода. изменение стейта, рассылка нового стейта всем
+          // смена действующего игрока переход хода. изменение стейта, рассылка нового стейта всем
           state.changingGameState({ gameId, payload });
           break;
         case 'gameState':
@@ -161,10 +173,8 @@ module.exports = async (app, {instanceOnlineService}) => {
     connection.socket.on('close', () => {
       //выход игрока, изменить стейт и оповестить всех игроков этой комнаты
       state.playerLeftGame(socketID);
-      app.websocketServer.clients.forEach(client => {
-        playersMassMailing(client, gameId);
-        gamesMassMailing(client);
-      });
+      playersMassMailing(gameId);
+      gamesMassMailing();
 
       app.log.info({
         msg: "Player disconnect at game",

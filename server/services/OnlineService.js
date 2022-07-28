@@ -2,20 +2,30 @@ const _ = require('lodash');
 
 class OnlineService {
   constructor (currentState) {
-    //const { usersOnline, usersSocketID, games } = currentState;
-    this.usersOnline = currentState?.usersOnline ?? [
-      { uid: 1, name: 'Admin' }
-    ];
-    this.usersSocketID = currentState?.usersSocketID ?? {};
+    this.usersOnline = currentState?.usersOnline ?? {
+      idAdmin : {
+        userData: { uid: 1, name: 'Admin' },
+        socket: { send: () => null }
+      },
+    };
+    this.usersOnlineId = currentState?.usersOnlineId ?? {}; // {socketId: uid}
     this.usersSocketIDByGame = currentState?.usersSocketIDByGame ?? {};
-    this.games = currentState?.games ?? [
-      { 
+    this.games = currentState?.games ?? {
+      0: {
         id: 0,
         author: 'Admin',
-        players: [{ name: 'AdminUid', uid: 1}, { name: 'PlayerUid', uid: 2}],
-        maxPlayers: 2
+        players: [
+            { name: 'AdminUid', uid: 1 },
+            { name: 'PlayerUid', uid: 2 },
+        ],
+        sockets: {
+          socketIdAdmin: { uid: 1, socket: { send: () => null } },
+          socketIdPlayer: { uid: 2, socket: { send: () => null } }
+        },
+        maxPlayers: 2,
+        gameState: {}
       },
-    ];
+    };
   }
 
   getAllUsersOnline() {
@@ -26,77 +36,113 @@ class OnlineService {
     return this.games;
   }
 
-  getUserNameById(userId) {
-    return this.usersOnline.find(({ uid }) => uid === userId);
+  addUserOnline({ data, socketID, socket }) {
+    const { uid } = data;
+    this.usersOnline[uid] = { userData: data, socket };
+    this.usersOnlineId[socketID] = uid;
+    return this.usersOnline;
   }
 
-  getUserUidBySocketId(socketID) {
-    const userUid = this.usersSocketID[socketID];
-    return this.getUserUidBySocketId(userUid);
+  getUserIdBySocketId(socketId) {
+    return this.usersOnlineId[socketId];
   }
 
-  addUserOnline(data, socketID) {
-    this.usersOnline.push(data);
-    const table = {};
-    this.usersOnline = this.usersOnline
-        .filter(({ uid }) => (!table[uid] && (table[uid] = 1)));
-    this.usersSocketID[socketID] = data.uid;
-    return this.games;
+  getUserBySocketId(socketID) {
+    const userId = this.getUserIdBySocketId[socketID];
+    return this.usersOnline[userId];
   }
 
-  exitUser(socketID) {
-    const id = this.usersSocketID[socketID];
-    this.usersOnline = this.usersOnline
-        .filter(({ uid }) => uid !== id);
-    delete this.usersSocketID[socketID];
+  getAllUsersData() {
+    const usersData = [];
+    for (let uid in this.usersOnline) {
+      const { userData } = this.usersOnline[uid];
+      usersData.push(userData);
+    }
+    return usersData;
+  }
+
+  getAllUsersSocketsOnline() {
+    const usersSockets = [];
+    for (let uid in this.usersOnline) {
+      const { socket } = this.usersOnline[uid];
+      usersSockets.push(socket);
+    }
+    return usersSockets;
+  }
+
+  exitUser(socketId) {
+    const userId = this.getUserIdBySocketId(socketId);
+    delete this.usersOnline[userId];
+    delete this.usersOnlineId[socketId];
     return this.usersOnline;
   }
 
   addGame(data) {
-    const game = { id: _.uniqueId(), ...data };
-    this.games.push(game);
-    return game.id;
+    const id = _.uniqueId();
+    this.games[id] = { id, sockets: {}, ...data };
+    return id;
   }
 
   // здесь начинаются методы для страницы gameId в будующих версиях разделить на два сервиса
 
-  removeGame(gameId) {
-    this.games = this.games.filter(({ id }) => gameId !== id);
-    return this.games;
-  }
-
-  getGameById(gameId) {
-    return this.games.find(({ id }) => id === gameId);
-  }
-
-  getPlayersThisGame(gameId) {
-    const game = this.getGameById(gameId);
-    //console.log(gameId, game);
-    return game?.players ?? [];
-  }
-
-  playerEnteredGame(data) {
-    const { gameId, socketID, usersData } = data;
-    //const { uid, name } = usersData;
-    const game = this.getGameById(gameId);
-    if (game.players.length === game.maxPlayers) {
-      return { error: 'Мест нет' };
+  getAllGamesData() {
+    const gamesData = [];
+    for (let game in this.games) {
+      const { id, author, players, maxPlayers } = this.games[game];
+      gamesData.push({ id, author, players, maxPlayers });
     }
-    game.players.push({ ...usersData, socketID });
+    return gamesData;
+  }
+
+  playerEnteredGame({ gameId, socketID, userData, socket }) {
+    const { uid } = userData;
+    const game = this.games[gameId];
+    const { players, id } = game;
+
+    if (players.length >= game.maxPlayers && !players.find(player => player.uid === uid )) {
+      return { error: 'Мест нет' };
+    } // надо будет реализовать отключение кнопки на фронте, при полной комнате менять стейт игры и в зависимости от него в таблице деактивировать кнопку присоединения
+
+    players.push(userData);
     const table = {};
-    game.players = game.players
+    game.players = players
         .filter(({ uid }) => (!table[uid] && (table[uid] = 1)));
-    this.usersSocketIDByGame[socketID] = game.id;
-    this.usersSocketID[socketID] = usersData.uid;
-    //console.log(game, this.games);
+
+    game.sockets[socketID] = { uid, socket };
+    this.usersSocketIDByGame[socketID] = id;
+    this.usersOnlineId[socketID] = uid;
+
     // новому игроку отправить текущий стейт игры
     return game;
   }
 
+  removeGame(gameId) {
+    delete this.games[gameId];
+    return this.games;
+  }
+
+  getUsersSocketsThisGames(gameId) {
+    const sockets = [];
+    const game = this.games[gameId];
+    if (!game) return null;
+
+    for (let socket in game.sockets) {
+      sockets.push(game.sockets[socket].socket);
+    }
+    return sockets;
+  }
+
+  getPlayersThisGame(gameId) {
+    const game = this.games[gameId];
+    return game?.players ?? [];
+  }
+
   playerLeftGame(socketID) {
     const gameId = this.usersSocketIDByGame[socketID];
-    const userUid = this.usersSocketID[socketID];
-    const game = this.getGameById(gameId);
+    const userUid = this.usersOnlineId[socketID];
+    const game = this.games[gameId];
+
+    if (!game) return null;
 
     game.players = game.players
       .filter(({ uid }) => uid !== userUid);
@@ -104,19 +150,20 @@ class OnlineService {
     if (!game.players || game.players.length === 0) {
       this.removeGame(gameId);
     }
-    // console.log(this.games);
+
     delete this.usersSocketIDByGame[socketID];
-    delete this.usersSocketID[socketID];
+    delete this.usersOnlineId[socketID];
+    delete game.sockets[socketID];
     return this.games;
   }
 
   getGameState(gameId) {
-    const game = this.getGameById(gameId);
+    const game = this.games[gameId];
     return game;
   }
 
   changingGameState({ gameId, data }) {
-    const game = this.getGameById(gameId);
+    const game = this.games[gameId];
     return game;
   }
 }
