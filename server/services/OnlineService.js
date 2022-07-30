@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 class OnlineService {
-  constructor (currentState) {
+  constructor(currentState) {
     this.usersOnline = currentState?.usersOnline ?? {
       idAdmin : {
         userData: { uid: 1, name: 'Admin' },
@@ -112,7 +112,6 @@ class OnlineService {
     this.usersSocketIDByGame[socketID] = id;
     this.usersOnlineId[socketID] = uid;
 
-    // новому игроку отправить текущий стейт игры
     return game;
   }
 
