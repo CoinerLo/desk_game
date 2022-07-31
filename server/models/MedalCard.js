@@ -1,21 +1,24 @@
 class MedalCard {
-
+  type = 'medal';
+  #nationCard;
+  #numberOfMedals;
+  #cardResurs;
   constructor(nationCard, numberOfMedals) {
-    this.nationCard = nationCard; // German France USA USSR
-    this.numberOfMedals = numberOfMedals; // 1 2
-    this.cardResurs = numberOfMedals;
+    this.#nationCard = nationCard; // German France USA USSR
+    this.#numberOfMedals = numberOfMedals; // 1 2
+    this.#cardResurs = numberOfMedals;
   }
 
   getNation() {
-    return this.nationCard;
+    return this.#nationCard;
   }
 
   getCardResurs() {
-    return this.cardResurs;
+    return this.#cardResurs;
   }
 
   getNumberOfMedals() {
-    return this.numberOfMedals;
+    return this.#numberOfMedals;
   }
 }
 

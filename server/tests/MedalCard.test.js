@@ -8,10 +8,9 @@ beforeEach(() => {
 
 test('MedalCard create card', () => {
   const result = {
-    nationCard: 'USSR',
-    numberOfMedals: 1,
-    cardResurs: 1
+    type: 'medal'
   }
+  expect(card).toBeInstanceOf(MedalCard);
   expect(card).toEqual(result);
 });
 
