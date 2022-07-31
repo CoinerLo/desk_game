@@ -16,7 +16,7 @@ class VehicleCard {
     this.cardResurs = cardResurs; // сколько карта дает ресурсов
     this.cardAttack = cardAttack; // сколько у карты очков атаки
     this.cardDefense = cardDefense; // сколько у карты очков защиты
-    this.cardAbilities = cardAbilities; // способности карты
+    this.cardAbilities = cardAbilities; // способности карты []
   }
 }
 
