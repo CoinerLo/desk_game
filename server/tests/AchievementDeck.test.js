@@ -14,7 +14,7 @@ test('AchievementDeck create', () => {
 test('AchievementDeck get deck', () => {
   const achievementDeck = deck.getAchievementDeck();
   const item = achievementDeck[0];
-  expect(achievementDeck).toHaveLength(3);
+  expect(achievementDeck).toHaveLength(4);
   expect(item).toBeInstanceOf(AchievementCard);
   expect(typeof item.getName()).toBe('string');
   expect(item.getNumberOfMedals()).toBe(5);

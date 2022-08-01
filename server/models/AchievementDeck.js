@@ -14,7 +14,7 @@ class AchievementDeck {
   #achievementDeck;
 
   constructor(amount) {
-    this.#achievementDeck = [...Array(amount).keys()].map((i) => fullAchievementDeck[i]);
+    this.#achievementDeck = [...Array(amount + 1).keys()].map((i) => fullAchievementDeck[i]);
   }
 
   getAchievementDeck() {

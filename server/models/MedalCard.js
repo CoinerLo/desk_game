@@ -9,6 +9,10 @@ class MedalCard {
     this.#cardResurs = numberOfMedals;
   }
 
+  getType() {
+    return this.type;
+  }
+
   getNation() {
     return this.#nationCard;
   }

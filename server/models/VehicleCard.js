@@ -27,6 +27,10 @@ class VehicleCard {
     this.#cardDefense = cardDefense; // сколько у карты очков защиты
     this.#cardAbilities = cardAbilities; // способности карты []
   }
+
+  getType() {
+    return this.type;
+  }
 }
 
 module.exports = VehicleCard;
