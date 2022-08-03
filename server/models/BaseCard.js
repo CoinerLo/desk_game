@@ -2,6 +2,7 @@ class BaseCard {
   type = 'base';
   #healthPoints = 2;                // количество здоровья базы
   #numberOfMedals = 3;              // побежденная база отправляется в колоду уничтожившего её игрока и защитывается в результате как 3 медали
+  #baseDefender;                    // ДОПИСАТЬ ТЕСТ карта теники на защите базы
 
   getType() {
     return this.type;
