@@ -6,7 +6,7 @@ class VehicleDeck {
   #vehicleDeck = [];
   #resetVehicleDeck = [];
 
-  start() {
+  constructor() {
     const deck = [];
     for (let nameCard in vehicle) {
 
@@ -18,14 +18,22 @@ class VehicleDeck {
     }
 
     this.#vehicleDeck = [ ...shuffle(deck) ];
-    return this.#vehicleDeck;
   }
 
-  pop() {
+  getCard() {
     const card = this.#vehicleDeck.pop();
     if (card) return card;
     this.updateDeck();
-    this.pop();
+    this.getCard();
+  }
+
+  getFourCards() {
+    const result = [];
+    result.push(this.getCard());
+    result.unshift(this.getCard());
+    result.unshift(this.getCard());
+    result.unshift(this.getCard());
+    return result;
   }
 
   updateDeck() {

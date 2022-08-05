@@ -9,16 +9,11 @@ beforeEach(() => {
 
 test('VehicleDeck create deck', () => {
   expect(deck).toBeInstanceOf(VehicleDeck);
-  expect(deck.getNumberCardsInDeck()).toBe(0);
+  expect(deck.getNumberCardsInDeck()).toBe(101);
 });
 
-test('VehicleDeck start pop update reset', () => {
-  const deckStart = deck.start();
-
-  expect(deckStart).toHaveLength(101);
-  expect(deck.getNumberCardsInDeck()).toBe(101);
-
-  const card = deck.pop();
+test('VehicleDeck start getCard update reset', () => {
+  const card = deck.getCard();
   const cardState = card.getCardState();
   deck.reset(card);
 
@@ -27,4 +22,10 @@ test('VehicleDeck start pop update reset', () => {
   expect(deck.getNumberCardsInResetDeck()).toBe(1);
   expect(deck.getNumberCardsInDeck()).toBe(100);
   expect(deck.updateDeck()).toBeNull();
+});
+
+test('VehicleDeck get four cards', () => {
+
+  const fourCards = deck.getFourCards();
+  expect(fourCards).toHaveLength(4);
 });
