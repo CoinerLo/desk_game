@@ -11,6 +11,7 @@ class VehicleCard {
   #cardAttack;
   #cardDefense;
   #cardAbilities = [];
+  #statrHP;
 
   constructor(cardData) {
     const {
@@ -26,8 +27,8 @@ class VehicleCard {
     } = cardData;
 
     this.#nameCard = nameCard;
-    this.#nationCard = nationCard;                   // German France USA USSR
-    this.#classCard = classCard;                     // тт ст лт пт арт всп
+    this.#nationCard = nationCard;                   // German France USA USSR Inter
+    this.#classCard = classCard;                     // тт ст лт пт арт всп брк
     this.#cardCost = cardCost;                       // стоимость карты
     this.#cardResurs = cardResurs;                   // сколько карта дает ресурсов
     this.#cardNationResurs = cardNationResurs;       // сколько карта дает национальных ресурсов
@@ -36,6 +37,7 @@ class VehicleCard {
     this.#cardAbilities = cardAbilities
       ? makeCardsAbilities(cardAbilities, cardData)
       : null;                                        // способности карты []
+    this.#statrHP = this.#cardDefense;               // сюда записываем стартовые хп что бы восстанавливать урон
   }
 
   getType() {
@@ -54,6 +56,17 @@ class VehicleCard {
       defense: this.#cardDefense,
       abilities: this.#cardAbilities,
     }
+  }
+
+  makeDamage(dmg) {
+    const xp = this.#cardDefense;
+    if (dmg >= xp) return true;
+    this.#cardDefense = xp - dmg;
+    return false;
+  }
+
+  reestablish() {
+    this.#cardDefense = this.#statrHP;
   }
 }
 

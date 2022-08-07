@@ -36,3 +36,17 @@ test('VehicleCard get card', () => {
   expect(desc.name).toBe('Подкрепление');
   expect(desc.countAbil).toBe(2);
 });
+
+test('VehicleCard make two damage', () => {
+  expect(card.makeDamage(2)).toBeTruthy();
+});
+
+test('VehicleCard make one damage', () => {
+  expect(card.makeDamage(1)).toBeFalsy();
+  expect(card.makeDamage(1)).toBeTruthy();
+
+  card.reestablish();
+  const { defense } = card.getCardState();
+
+  expect(defense).toBe(2);
+});
