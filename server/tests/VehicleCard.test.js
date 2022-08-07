@@ -4,6 +4,7 @@ const VehicleCard = require('../models/VehicleCard');
 let card;
 
 const cardStat = {
+  type: 'vehicle',
   nameCard: 'T30',
   nationCard: 'USA',
   classCard: 'тт',
@@ -26,7 +27,7 @@ test('VehicleCard create card', () => {
 });
 
 test('VehicleCard get card', () => {
-  const cardState = card.getCardState();
+  const cardState = card.getState();
   const abil = cardState.abilities[0];
   const desc = abil.getDescription();
   expect(typeof cardState.name).toBe('string');
@@ -46,7 +47,7 @@ test('VehicleCard make one damage', () => {
   expect(card.makeDamage(1)).toBeTruthy();
 
   card.reestablish();
-  const { defense } = card.getCardState();
+  const { defense } = card.getState();
 
   expect(defense).toBe(2);
 });

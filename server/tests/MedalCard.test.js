@@ -25,3 +25,13 @@ test('MedalCard get card resurs', () => {
 test('MedalCard get number of medals', () => {
   expect(card.getNumberOfMedals()).toBe(1);
 });
+
+test('MedalCard getState', () => {
+  const result = {
+    type: 'medal',
+    resurs: 1,
+    nation: 'USSR',
+    medals: 1,
+  }
+  expect(card.getState()).toEqual(result);
+});

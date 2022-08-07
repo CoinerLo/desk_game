@@ -44,8 +44,9 @@ class VehicleCard {
     return this.type;
   }
 
-  getCardState() {
+  getState() {
     return {
+      type: this.getType(),
       name: this.#nameCard,
       nation: this.#nationCard,
       class: this.#classCard,

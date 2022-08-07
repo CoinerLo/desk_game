@@ -133,7 +133,7 @@ class PlayerTankSquad {
     let bases = this.getBases();
     bases = bases.map(base => base.getState());
     let inHand = isPrivate ? this.getAllCardsInHand() : this.numberCardsInHand();
-    inHand = isPrivate ? inHand.map(card => card.getCardState()) : inHand;
+    inHand = isPrivate ? inHand.map(card => card.getState()) : inHand;
     const reserve = this.numberCardsInReserve();
     const stock = this.numberCardsInStock();
 

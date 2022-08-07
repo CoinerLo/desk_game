@@ -63,9 +63,10 @@ class BaseCard {
   getState() {                            // получить состояние базы
     const defender = this.getStatBaseDefender();
     return {
+      type: this.getType(),
       hp: this.getHP(),
       medals: this.getNumberOfMedals(),
-      defender: defender ? defender.getCardState() : null,
+      defender: defender ? defender.getState() : null,
     }
   }
 }

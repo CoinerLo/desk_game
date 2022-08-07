@@ -89,7 +89,7 @@ test('PlayerTankSquad pushCardToDefendBase', () => {
   const oneCard = new VehicleCard(cardStatOne);
   const resultOne = playerTankSquad.pushCardToDefendBase(oneCard, 1);       // ставим первую карту на защиту второй базы
   let defendOne = playerTankSquad.getCardToDefendBase(1);
-  const { name: nameOne } = defendOne.getCardState();
+  const { name: nameOne } = defendOne.getState();
 
   expect(resultOne).toBeTruthy();
   expect(nameOne).toBe('nameOne');
@@ -99,8 +99,8 @@ test('PlayerTankSquad pushCardToDefendBase', () => {
   defendOne = playerTankSquad.getCardToDefendBase(1);
   let defendTwo = playerTankSquad.getCardToDefendBase(0);                   // она оказывается на защите первой базы т.к. та была незащищена
 
-  const { name: nameTwoPos } = defendOne.getCardState();
-  const { name: nameOnePos } = defendTwo.getCardState();
+  const { name: nameTwoPos } = defendOne.getState();
+  const { name: nameOnePos } = defendTwo.getState();
 
   expect(resultTwo).toBeTruthy();
   expect(nameTwoPos).toBe('nameOne');
@@ -116,10 +116,10 @@ test('PlayerTankSquad pushCardToDefendBase', () => {
   defendTwo = playerTankSquad.getCardToDefendBase(1);
   let defendThree = playerTankSquad.getCardToDefendBase(2);
 
-  const { name: nOne } = defendOne.getCardState();
-  const { name: nTwo } = defendTwo.getCardState();
-  const { name: nThree } = defendThree.getCardState();
-  const { name: nFour } = resultFour.getCardState();
+  const { name: nOne } = defendOne.getState();
+  const { name: nTwo } = defendTwo.getState();
+  const { name: nThree } = defendThree.getState();
+  const { name: nFour } = resultFour.getState();
 
   expect(resultThree).toBeTruthy();
   expect(resultFour).toBeInstanceOf(VehicleCard);                           // первая карта вернулась в колоду т.к. была заменена на 4-ю

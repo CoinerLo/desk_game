@@ -81,9 +81,11 @@ test('BaseCard card to defend base make damage', () => {
 
 test('BaseCard getState', () => {
   const result = {
+    type: 'base',
     hp: 2,
     medals: 3,
     defender: {
+      type: 'vehicle',
       name: 'name',
       nation: 'USA',
       class: 'тт',

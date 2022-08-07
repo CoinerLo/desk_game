@@ -24,6 +24,15 @@ class MedalCard {
   getNumberOfMedals() {
     return this.#numberOfMedals;
   }
+
+  getState() {
+    return {
+      type: this.getType(),
+      resurs: this.getCardResurs(),
+      nation: this.getNation(),
+      medals: this.getNumberOfMedals(),
+    }
+  }
 }
 
 module.exports = MedalCard;

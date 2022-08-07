@@ -1,5 +1,5 @@
 const isDefend = (card) => {
-  const { defense } = card.getCardState();
+  const { defense } = card.getState();
   return defense > 0 ? true : false;
 }
 

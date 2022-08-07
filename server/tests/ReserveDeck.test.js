@@ -20,7 +20,7 @@ test('ReserveDeck get deck', () => {
 test('ReserveDeck get card by number', () => {
   const card = deck.getCardByNum(0);
   const reserveDeck = deck.getReserveDeck();
-  const cardState = card.getCardState();
+  const cardState = card.getState();
 
   expect(card).toBeInstanceOf(VehicleCard);
   expect(reserveDeck).toHaveLength(4);
@@ -40,3 +40,8 @@ test('ReserveDeck discard four cards', () => {
   expect(deck.getNumberCardsInDeck()).toBe(93);
   expect(deck.getNumberCardsInResetDeck()).toBe(4);
 });
+
+test('ReserveDeck get state', () => {
+  const deckState = deck.getState();
+  expect(deckState[0]).toHaveProperty('name');
+})

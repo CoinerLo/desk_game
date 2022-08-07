@@ -55,23 +55,40 @@ class DeckOfMedalCards {
     }
   }
 
+  getFullCountMedals() {
+    return {
+      oneMedal: {
+        'USA': this.howManyCardsInDeckOneMedal('USA'),
+        'USSR': this.howManyCardsInDeckOneMedal('USSR'),
+        'France': this.howManyCardsInDeckOneMedal('France'),
+        'German': this.howManyCardsInDeckOneMedal('German'),
+      },
+      twoMedals: {
+        'USA': this.howManyCardsInDeckTwoMedal('USA'),
+        'USSR': this.howManyCardsInDeckTwoMedal('USSR'),
+        'France': this.howManyCardsInDeckTwoMedal('France'),
+        'German': this.howManyCardsInDeckTwoMedal('German'),
+      }
+    }
+  }
+
   getTwoMedal(nation) {
     switch (nation) {
       case 'German':
         return this.#twoGermanMedal.length > 0
-          ? this.#twoGermanMedal.pop()
+          ? [this.#twoGermanMedal.pop()]
           : [this.getOneMedal('German'), this.getOneMedal('German')];
       case 'France':
         return this.#twoFranceMedal.length > 0
-          ? this.#twoFranceMedal.pop()
+          ? [this.#twoFranceMedal.pop()]
           : [this.getOneMedal('France'), this.getOneMedal('France')];
       case 'USA':
         return this.#twoUSAMedal.length > 0
-          ? this.#twoUSAMedal.pop()
+          ? [this.#twoUSAMedal.pop()]
           : [this.getOneMedal('USA'), this.getOneMedal('USA')];
       case 'USSR':
         return this.#twoUSSRMedal.length > 0
-          ? this.#twoUSSRMedal.pop()
+          ? [this.#twoUSSRMedal.pop()]
           : [this.getOneMedal('USSR'), this.getOneMedal('USSR')];
       default:
         return null;

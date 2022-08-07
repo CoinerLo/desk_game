@@ -34,6 +34,10 @@ class ReserveDeck extends VehicleDeck {
     this.#reserveDeck.push(...fourNewCards);
     return this.#reserveDeck;
   }
+
+  getState() {
+    return this.#reserveDeck.map(card => card.getState());
+  }
 }
 
 module.exports = ReserveDeck;

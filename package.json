@@ -1,6 +1,6 @@
 {
   "name": "battle_of_magicians",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "homepage": ".",
   "dependencies": {
     "@fastify/cors": "^8.0.0",
@@ -41,7 +41,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "nodemon server",
-    "testServer": "jest server/tests"
+    "testServer": "jest server/tests",
+    "testServerWatch": "jest server/tests --watchAll"
   },
   "eslintConfig": {
     "extends": [

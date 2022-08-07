@@ -14,7 +14,7 @@ test('DeckOfMedalCards one medal', () => {
 
 test('DeckOfMedalCards two medal', () => {
   const card = new MedalCard('USA', 2);
-  expect(deck.getTwoMedal('USA')).toEqual(card);
+  expect(deck.getTwoMedal('USA')[0]).toEqual(card);
 });
 
 test('DeckOfMedalCards end two medals', () => {
@@ -24,4 +24,10 @@ test('DeckOfMedalCards end two medals', () => {
   deck.getTwoMedal('USA');
   expect(deck.howManyCardsInDeckTwoMedal('USA')).toBe(0);
   expect(deck.getTwoMedal('USA')).toEqual(card);
+});
+
+test('DeckOfMedalCards getFullCountMedals', () => {
+  const fullMedals = deck.getFullCountMedals();
+  expect(fullMedals.oneMedal.USA).toBe(9);
+  expect(fullMedals.twoMedals.German).toBe(3);
 });

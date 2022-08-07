@@ -24,6 +24,15 @@ class AchievementCard {
   getNumberOfMedals() {
     return this.#numberOfMedals;
   }
+
+  getState() {
+    return {
+      type: this.getType(),
+      medals: this.getNumberOfMedals(),
+      description: this.getDescription(),
+      name: this.getName(),
+    }
+  }
 }
 
 module.exports = AchievementCard;

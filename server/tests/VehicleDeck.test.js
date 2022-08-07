@@ -14,7 +14,7 @@ test('VehicleDeck create deck', () => {
 
 test('VehicleDeck start getCard update reset', () => {
   const card = deck.getCard();
-  const cardState = card.getCardState();
+  const cardState = card.getState();
   deck.reset(card);
 
   expect(card).toBeInstanceOf(VehicleCard);

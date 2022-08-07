@@ -19,3 +19,11 @@ test('AchievementDeck get deck', () => {
   expect(typeof item.getName()).toBe('string');
   expect(item.getNumberOfMedals()).toBe(5);
 });
+
+test('AchievementDeck deleteAchievement', () => {
+  const achievement = deck.deleteAchievement(1);
+  const achievementDeck = deck.getAchievementDeck();
+
+  expect(achievement).toBeInstanceOf(AchievementCard);
+  expect(achievementDeck).toHaveLength(3);
+});
